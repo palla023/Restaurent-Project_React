@@ -2,8 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { addorder, resetFilter, resetTableNumber } from "../Actions";
-import "../data.json";
+import { addorder, resetFilter, resetTableNumber } from "../Actions/index.js";
 
 const Card = ({
   filter_name,
@@ -13,18 +12,24 @@ const Card = ({
   resetFilter,
 }) => {
   const [data, setData] = useState([]);
+  const [jsondata, setJsonData] = useState([]);
   const [cloneData, setCloneData] = useState([]); //store the incoming data in a cloneData Variable
+
+
   useEffect(() => {
-    fetch(
-      "https://food-itema-default-rtdb.firebaseio.com/telugu-skillhub-api/-MsE8GfWtRjc8x_t8pCC.json"
-    )
+    fetch("https://resproj-app-default-rtdb.firebaseio.com/resProj-api/items.json")
       .then((response) => response.json())
       .then((json) => {
-        // console.log(json.items)
-        setData(json.items);
-        setCloneData(json.items); //fetch an api from db and then convert to json and that json can be stored in data by setdata is used to reset the data
+        setData(json);
+        setCloneData(json);   
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   }, []);
+  
+
+  
 
   //For Filtering the data
   useEffect(() => {
@@ -66,6 +71,7 @@ const Card = ({
                         src={item.url}
                         className="card-image-top"
                         alt="image not found"
+                        style={{ height:"250px"}}
                       />
                       <div className="card-body">
                         <h5 className="card-title">{item.name}</h5>
